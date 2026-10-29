@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarePoint Hospital Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h2 onclick="showScreen('home')">✚ CarePoint</h2>
+  <button class="home-btn" onclick="showScreen('home')">⌂ Home</button>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="hero">
+      <span class="tag">SMART HEALTHCARE</span>
+      <h1>Care made <em>simple.</em></h1>
+      <p>Welcome to CarePoint Hospital Management System.</p>
+      <div class="portal-box">
+        <button class="portal" onclick="showScreen('userMenu')">
+          <span>♡</span>
+          <b>User Portal</b>
+          <small>Register and book appointments</small>
+          <strong>→</strong>
+        </button>
+        <button class="portal" onclick="showScreen('adminMenu')">
+          <span>▦</span>
+          <b>Admin Portal</b>
+          <small>Manage hospital operations</small>
+          <strong>→</strong>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- USER MENU -->
+  <section id="userMenu" class="screen">
+    <button class="back" onclick="showScreen('home')">← Home</button>
+    <h1>User Portal</h1>
+    <p>What would you like to do?</p>
+    <div class="menu-grid">
+      <button class="menu-card" onclick="showScreen('register')">＋<b>Patient Registration</b><small>Create patient profile</small></button>
+      <button class="menu-card" onclick="showScreen('doctors')">✚<b>Doctor Details</b><small>Browse specialists</small></button>
+      <button class="menu-card" onclick="showScreen('booking')">▦<b>Book Appointment</b><small>Request a consultation</small></button>
+      <button class="menu-card" onclick="showScreen('myAppointments')">◷<b>My Appointments</b><small>View appointment status</small></button>
+    </div>
+  </section>
+
+  <!-- PATIENT REGISTRATION -->
+  <section id="register" class="screen">
+    <button class="back" onclick="showScreen('userMenu')">← User Portal</button>
+    <div class="step">STEP 1 OF 3</div>
+    <h1>Patient Registration</h1>
+    <p>Enter your details.</p>
+    <div class="panel">
+      <form id="patientForm" class="form-grid">
+        <label>Full Name *
+          <input name="name" required placeholder="Patient name">
+        </label>
+        <label>Age *
+          <input name="age" type="number" min="0" max="120" required>
+        </label>
+        <label>Gender *
+          <select name="gender" required>
+            <option value="">Select gender</option>
+            <option>Female</option>
+            <option>Male</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Phone *
+          <input name="phone" type="tel" pattern="[0-9]{10}" required placeholder="10 digit number">
+        </label>
+        <label class="full">Email
+          <input name="email" type="email" placeholder="Email address">
+        </label>
+        <label class="full">Address
+          <textarea name="address" rows="2" placeholder="Address"></textarea>
+        </label>
+        <button class="btn full" type="submit">Register & Continue →</button>
+      </form>
+      <p id="patientMsg" class="message"></p>
+    </div>
+  </section>
+
+  <!-- DOCTORS -->
+  <section id="doctors" class="screen">
+    <button class="back" onclick="showScreen('userMenu')">← User Portal</button>
+    <h1>Our Doctors</h1>
+    <p>Choose a specialist for your visit.</p>
+    <div id="doctorList" class="doctor-grid"></div>
+    <button class="btn" onclick="showScreen('booking')">Book Appointment →</button>
+  </section>
+
+  <!-- APPOINTMENT -->
+  <section id="booking" class="screen">
+    <button class="back" onclick="showScreen('userMenu')">← User Portal</button>
+    <div class="step">STEP 2 OF 3</div>
+    <h1>Book Appointment</h1>
+    <p>Provide your preferred appointment details.</p>
+    <div class="panel">
+      <form id="appointmentForm" class="form-grid">
+        <label class="full">Patient *
+          <select name="patientId" id="patientSelect" required></select>
+        </label>
+        <label class="full">Doctor *
+          <select name="doctorId" id="doctorSelect" required></select>
+        </label>
+        <label>Date *
+          <input type="date" name="date" id="visitDate" required>
+        </label>
+        <label>Time *
+          <input type="time" name="time" required>
+        </label>
+        <label class="full">Reason for visit *
+          <textarea name="reason" rows="3" required placeholder="Reason for appointment"></textarea>
+        </label>
+        <button class="btn full" type="submit">Submit Appointment →</button>
+      </form>
+      <p id="appointmentMsg" class="message"></p>
+    </div>
+  </section>
+
+  <!-- CONFIRMATION -->
+  <section id="confirmation" class="screen">
+    <div class="success">✓</div>
+    <h1>Request Submitted!</h1>
+    <p id="confirmMsg"></p>
+    <div class="panel">
+      <p class="pending">● Pending admin review</p>
+      <button class="btn" onclick="showScreen('myAppointments')">My Appointments →</button>
+      <button class="btn light" onclick="showScreen('userMenu')">User Portal</button>
+    </div>
+  </section>
+
+  <!-- USER APPOINTMENTS -->
+  <section id="myAppointments" class="screen">
+    <button class="back" onclick="showScreen('userMenu')">← User Portal</button>
+    <h1>My Appointments</h1>
+    <div class="panel table-wrap">
+      <table>
+        <thead>
+          <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr>
+        </thead>
+        <tbody id="userAppointmentRows"></tbody>
+      </table>
+    </div>
+    <button class="btn" onclick="showScreen('booking')">＋ New Appointment</button>
+  </section>
+
+  <!-- ADMIN MENU -->
+  <section id="adminMenu" class="screen">
+    <button class="back" onclick="showScreen('home')">← Home</button>
+    <div class="step">ADMIN WORKSPACE · DEMO</div>
+    <h1>Admin Dashboard</h1>
+    <p>Hospital operations overview.</p>
+    <div class="stats">
+      <div><small>Patients</small><b id="countPatients">0</b></div>
+      <div><small>Appointments</small><b id="countAppointments">0</b></div>
+      <div><small>Pending</small><b id="countPending">0</b></div>
+      <div><small>Doctors</small><b id="countDoctors">3</b></div>
+    </div>
+    <div class="menu-grid">
+      <button class="menu-card" onclick="showScreen('adminPatients')">♙<b>Patient Records</b><small>Search patients</small></button>
+      <button class="menu-card" onclick="showScreen('adminDoctors')">✚<b>Doctor Management</b><small>Add or remove doctors</small></button>
+      <button class="menu-card" onclick="showScreen('adminAppointments')">▦<b>Appointments</b><small>Manage requests</small></button>
+      <button class="menu-card" onclick="showScreen('billing')">₹<b>Medical Billing</b><small>Calculate medical bills</small></button>
+    </div>
+    <p class="warning">Demo only: No secure admin authentication. Do not enter real patient information.</p>
+    <button class="btn light" onclick="exportData()">Export Demo Data</button>
+    <button class="btn danger" onclick="resetData()">Reset Demo Data</button>
+  </section>
+
+  <!-- ADMIN PATIENTS -->
+  <section id="adminPatients" class="screen">
+    <button class="back" onclick="showScreen('adminMenu')">← Dashboard</button>
+    <h1>Patient Records</h1>
+    <input id="searchPatient" class="search" placeholder="Search name, ID, phone..." oninput="renderPatients()">
+    <div class="panel table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Phone</th><th>Email</th></tr></thead>
+        <tbody id="patientRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DOCTOR MANAGEMENT -->
+  <section id="adminDoctors" class="screen">
+    <button class="back" onclick="showScreen('adminMenu')">← Dashboard</button>
+    <h1>Doctor Management</h1>
+    <div class="panel">
+      <form id="doctorForm" class="form-grid">
+        <label>Doctor Name *<input name="name" required placeholder="Dr. Name"></label>
+        <label>Specialty *<input name="specialty" required placeholder="Specialty"></label>
+        <label>Experience (years)<input name="experience" type="number" min="0" value="1" required></label>
+        <label>Fee (₹)<input name="fee" type="number" min="0" value="500" required></label>
+        <button class="btn full">＋ Add Doctor</button>
+      </form>
+    </div>
+    <div class="panel">
+      <h2>Doctor Directory</h2>
+      <div id="adminDoctorList"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN APPOINTMENTS -->
+  <section id="adminAppointments" class="screen">
+    <button class="back" onclick="showScreen('adminMenu')">← Dashboard</button>
+    <h1>Appointment Management</h1>
+    <div class="panel table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date / Time</th><th>Reason</th><th>Status</th></tr></thead>
+        <tbody id="adminAppointmentRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- BILLING -->
+  <section id="billing" class="screen">
+    <button class="back" onclick="showScreen('adminMenu')">← Dashboard</button>
+    <h1>Medical Bill Calculator</h1>
+    <div class="panel">
+      <form id="billForm" class="form-grid">
+        <label class="full">Patient *
+          <select name="patientId" id="billPatient" required></select>
+        </label>
+        <label>Consultation fee (₹)
+          <input name="consultation" type="number" min="0" value="500" required>
+        </label>
+        <label>Tests / services (₹)
+          <input name="services" type="number" min="0" value="0" required>
+        </label>
+        <label>Medicines (₹)
+          <input name="medicines" type="number" min="0" value="0" required>
+        </label>
+        <label>Discount (₹)
+          <input name="discount" type="number" min="0" value="0" required>
+        </label>
+        <div class="bill-total full">Estimated Total: <b id="billTotal">₹500</b></div>
+        <button class="btn full">Calculate & Save Bill</button>
+      </form>
+      <p id="billMsg" class="message"></p>
+    </div>
+    <div class="panel">
+      <h2>Billing Records</h2>
+      <div id="billRows"></div>
+    </div>
+  </section>
+</main>
+
+<footer>✚ CarePoint <span>Hospital Management System · Student Project</span></footer>
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
